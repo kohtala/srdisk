@@ -1,0 +1,94 @@
+Things to do depending on command line:
+
+  No command line or /ASK /YES /NO /FORCE /VERBOSE /OLD alone
+    Display "/? for help"
+    print format
+
+  /? /HELP
+    Display help
+
+  /DOSFORMAT
+    Conjure other parameters
+    Execute depending the other parameters
+
+  /A /FATS /CLUSTER /D /DIRENTRIES /S /SECTORSIZE
+    format_f shows if some of these changed
+    init_drive()
+    make_newf() checks if really changed for
+    If different from the old
+      make_new_format() counts the format
+      disable_disk(), configure, resize or WriteNewFormat
+
+  /ERASE /UNCONDITIONAL
+    init_drive()
+    make_newf() and make_new_format()
+    Fresh format the disk
+
+  /DEVICETYPE /HEADS /SIDES /SECTORS /SPT
+    Reconfigure
+
+  /ENVIRONMENT
+    init_drive()
+    Set the environment variables and report done so
+    Do what other parameters might require
+
+  /WRITEPROTECT
+    Set the write protection flag
+
+  /M /MAXSIZES
+    If no size change, reallocate anyway
+
+
+
+Function dependences and program structure by functions
+
+main()
+  parse_cmdline(argc, argv)
+  init_drive()
+  format_disk()
+  set_env()
+  set_write_protect()
+
+init_drive()
+  resolve_drive()
+  Decide on drive
+  Limit variables on operating system type
+  retrieve_old_format()
+
+retrieve_old_format()
+  Scan the driver list and fill subconfs
+  Fill the "f" variable
+
+format()
+  make_newf()
+  Test for changes in format
+  make_new_format()
+  count_root()
+  WriteNewFormat()
+  Resize()
+
+WriteNewFormat()
+  DiskAllocate(0)
+    fail -> see if old disk OK and if not make old kind of disk if possible
+  configure_drive()
+  Write the disk
+
+Resize()
+  FAT_open(&f) - fail -> abort
+  FAT_stats() - fail -> abort
+  packdata()
+    fail -> try to finnish what we are in middle of and abort
+  DiskAllocate(1)
+    fail -> if old disk not OK, try WriteNewFormat for new and then old
+  MoveSectors
+    fail -> try to continue, WriteNewFormat for new and then old format
+  FixFAT()
+    fail -> try to continue, WriteNewFormat for new and then old format
+  DiskAllocate(1)
+    fail -> WriteNewFormat for new format
+  FAT_close()
+    fail -> try to continue, WriteNewFormat for new and then old format
+  ClearSectors()
+    fail -> try to continue, WriteNewFormat for new and then old format
+  configure_drive()
+

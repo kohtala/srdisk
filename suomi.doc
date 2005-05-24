@@ -1,0 +1,427 @@
+
+                              SRDISK (TM)
+                     ReSizeable RAMDisk versio 2.09
+                         XMS ja EMS muisteille
+
+                 Copyright (C) 1991-1996, 2005 Marko Kohtala
+
+
+SISŽLT™
+
+  1. Tekij„n vastuu
+  2. Lisenssi
+  3. Ominaisuudet
+  4. Tiedostot
+  5. K„ytt”ohjeet
+  5.1. Asennus
+  5.2. SRDISK laiteajuri
+  5.3. SRDUMMY laiteajuri
+  5.4. SRDISK ohjelma
+  5.4.1. SRDISK ohjelman parametrit
+  6. Ongelmanratkontaa
+  7. Tuotemerkit
+  8. Loppusanat
+
+
+
+                           1. TEKIJŽN VASTUU
+
+TŽMŽ OHJELMISTO JA KŽYTT™OHJE TOIMITETAAN SELLAISENAAN ILMAN TAKUUTA
+TOIMIVUUDESTA SAATIKA MISTŽŽN MUUSTAKAAN OLI SE ERIKSEEN MAINITTU TAI 
+EI. JOHTUEN NIISTŽ LUKUISISTA ERILAISISTA LAITTEISTO JA 
+OHJELMISTOYMPŽRIST™ISTŽ JOISSA TŽTŽ OHJELMISTOA SAATETAAN KŽYTTŽŽ, ON 
+TEKIJŽN MAHDOTONTA TAATA TOIMIVUUTTA JOKA TILANTEESSA.
+
+HYVŽT TIETOJENKŽSITTELYTAVAT VAATIVAT, ETTŽ JOKAISTA OHJELMAA TESTETAAN 
+PERUSTEELLISESTI EI-KRIITTISELLŽ TIEDOLLA ENNEN KUIN SIIHEN LUOTETAAN. 
+KŽYTTŽJŽN TULEE OTTAA TŽYSI VASTUU OHJELMAN KŽYT™STŽ. TEKIJŽN VASTUU 
+RAJOITETAAN TUOTTEEN KORVAAMISEEN TAI KAUPPAHINNAN TAKAISIN MAKSUUN.
+
+
+
+                              2. LISENSSI
+
+T„m„ ohjelmisto ei ole julkista omaisuutta (public domain). Se on
+tekij„noikeuden suojaamaa ohjelmistoa jota levitet„„n GNU GPL
+lisenssin alaisena.
+
+
+
+                            3. OMINAISUUDET
+
+T„m„ RAM levyajuri tukee seuraavia ominaisuuksia:
+
+  * Yhteensopiva MS-DOS versioiden 3.00-6.x ja DR-DOS 5 ja 6 kanssa.
+  * XMS - Extended muisti 286 ja uudemmissa koneissa joissa on HIMEM.SYS
+    tai muu XMS 2.0 laiteajuri.
+  * EMS - Expanded muisti. LIM/EMS versio 3.2 ja 4.0.
+  * Laiteajurit voidaan linkitt„„ siten ett„ saadaan suurempia levyj„
+    k„ytt„m„ll„ useamman laista muistia yht„ levy„ varten.
+  * Levyn kokoa voi muuttaa ja tiedot levyll„ eiv„t katoa.
+  * Levyn voi poistaa jolloin se ei kuluta muistia laiteajuria enemp„„.
+  * 32-bittinen osoitus, joka mahdollistaa yli 32M levyt (jos muistia on
+    tarpeeksi).
+  * Voi m„„ritell„ itse mm. levyn seuraavat ominaisuudet
+      - sektorin koko
+      - clusterin koko
+      - juurihakemiston koon
+      - FAT taulukoiden m„„r„n
+  * Valmiiksi m„„ritellyt DOS ja FDFORMAT levyjen n„k”isformaatit
+  * DISKCOPY yhteensopiva DOS 3.20 versiosta yl”sp„in. Voit kopioida
+    SRDISK asemalle/asemalta DOS:n DISKCOPYlla.
+  * Kirjoitussuojaus.
+  * Voit asettaa ymp„rist”muuttujat osoittamaan SRDISK asemien 
+    kirjaimet.
+  * Mukana on laiteajuri, joka vain kuluttaa asematunnuksia jotta voit 
+    asentaa SRDISK (tai mink„ tahansa muun asennettavan) aseman 
+    korkeampaan kirjaimeen.
+
+Minulla on lista uusista ominaisuuksista joita lis„t„ tulevaisuudessa. 
+L„hett„m„ll„ rahaa ja ideoita voit auttaa niiden toteutuksessa ja t„m„n 
+ohjelman tekemisess„ entist„ paremmaksi.
+
+Levyn tekeminen, joka muuttaa kokoaan itsest„„n tarpeen mukaan ei ole 
+minulle mahdollista n„ill„ n„kymin. FAT tiedostoj„rjestelm„ DOS:ssa ei 
+kertakaikkiaan ole suunniteltu sit„ varten.
+
+
+
+                              4. TIEDOSTOT
+
+Ohjelmiston t„h„n versioon kuuluvat seuraavat tiedostot:
+
+        READ.ME         joitain huomautuksia (engl)
+        FILE_ID.DIZ     lyhyt selostus BBS operaattoreille
+        WHATSNEW.DOC    uutta t„ss„ versiossa ja historiaa (engl)
+        SRDISK.DOC      englanninkielinen dokumentti
+        SRDXMS.SYS      laiteajuri XMS muistille
+        SRDXMSS.SYS     laiteajuri XMS muistille (pieni versio)
+        SRDEMS.SYS      laiteajuri EMS 4.0
+        SRDEMSS.SYS     laiteajuri EMS 4.0 muistille (pieni versio)
+        SRDEMS3.SYS     laiteajuri EMS 3.2 muistille
+        SRDUMMY.SYS     laiteajuri joka ei tee mit„„n
+        SRDISK.EXE      formatoijaohjelma
+        XMSSIZE.DOC     englanninkielinen ohje XMSSIZE.EXE„ varten
+        XMSSIZE.EXE     viimeinen keino, jos HIMEM.SYS ei tue yli 64M
+        SUOMI.DOC       suomenkielinen dokumentti
+
+Pienet versiot laiteajureista eiv„t tue DOS DISKCOPYa eik„ niiss„ ole 
+omaa pinoa (STACK). Jos ongelmia esiintyy, voitte kokeilla laittaa rivin 
+"STACKS=8,512" CONFIG.SYS tiedostoon. Pieniin versioihin ei my”sk„„n voi 
+linkitt„„ toista laiteajuria.
+
+
+
+                            5. KŽYTT™OHJEET
+
+SRDISK on jaettu kahteen osaan:
+
+        1) laiteajuri joka tarjoaa DOS:lle virtuaalisen aseman ja
+        2) ohjelma joka m„„rittelee virtuaaliaseman ominaisuudet
+
+Seuraavat kappaleet selostavat miten SRDISK asennetaan ja miten sit„ 
+k„ytet„„n.
+
+
+                              5.1. ASENNUS
+
+Helpoin ja nopein tapa asentaa SRDISK XMS muistia varten menee 
+seuraavien vaiheiden mukaan:
+
+1. Kopioi SRDXMS.SYS k„ynnistyslevysi juurihakemistoon.
+
+2. Kopioi SRDISK.EXE johonkin hakemistoon polussa (PATH).
+
+3. Varmista ett„ sinulla on HIMEM.SYS tai jokin muu XMS ajuri 
+   asennettuna CONFIG.SYS:ssa ennen seuraavaa vaihetta.
+
+4. Lis„„ CONFIG.SYS:iin rivi
+
+        DEVICE=SRDXMS.SYS
+
+5. Lis„„ AUTOEXEC.BAT:iin PATH komennon j„lkeen rivi
+
+        SRDISK <koko>
+
+<koko> tulee korvata levyn halutulla koolla kilotavuissa.
+
+Jos sinulla on EMS muistia, k„yt„ SRDEMS.SYS tiedostoa SRDXMS.SYS:n 
+tilalla ja varmista ett„ EMS laiteajuri on asennettuna CONFIG.SYS:ssa 
+ennen SRDEMS.SYS ajuria.
+
+Laiteajuri lis„„ DOS:iin yhden uuden levyaseman. Ennen kuin ajat 
+SRDISK.EXE:n tai kun asetat levyn koon nollaan, t„m„ uusi asema 
+k„ytt„ytyy kuin levyasema jossa ei ole levy„ sis„ll„.
+
+
+                         5.2. SRDISK LAITEAJURI
+
+RAM levy„ varten tarvitset laiteajurin. T„m„ laiteajuri tarjoaa DOS:lle 
+taulukon sektoreita, joita DOS k„ytt„„ tiedon tallentamiseen. SRDISK:n 
+mukana tulee erilliset ajurit XMS ja EMS muistien k„ytt””n.
+
+Yleens„ (jos koskaan) et tarvitse mit„„n paremetreja laiteajurille, 
+mutta se hyv„ksyy kaksi parametria:
+
+        DEVICE=SRDmmm.SYS [d:] [/A]
+
+[] parametrin ymp„rill„ tarkoittaa ett„ parametri ei ole pakollinen. 
+Hakasulkuja ei saa kirjoittaa.
+
+d:      'd:':t„ voi k„ytt„„ kertomaan asemalle mihin kirjaimeen se 
+        asentuu jos DOS ei sit„ jostain syyst„ kerro sit„ sille oikein.
+        Yleens„ t„m„n k„yt”st„ aiheutuu pelkk„„ harmia.
+
+        Toinen k„ytt” on kertoa mihin SRDISK asemaan nyt asennettava 
+        laite tulisi linkitt„„. '/A' on t„h„n tarkoitukseen yleens„ 
+        parempi.
+
+        Jos tarvitset SRDISKin johonkin tiettyyn kirjaimeen, k„yt„ 
+        SRDUMMY.SYS laiteajuria.
+
+/A      T„m„ neuvoo laiteajurin linkitt„m„„n itsens„ viimeksi 
+        asennettuun SRDISK asemaan. T„m„n laiteajurin tarjoama muisti on 
+        t„m„n j„lkeen n„kyviss„ lis„muistina edelliselle ajurille.
+
+        Jos haluat ett„ levyn alkuosa k„ytt„„ XMS muistia ja loppuosa 
+        EMS muistia, laita seuraavat rivit CONFIG.SYS tiedostoon:
+
+                DEVICE=SRDXMS.SYS
+                DEVICE=SRDEMS.SYS /A
+
+        Jotta t„m„ toimisi, t„ytyy ensimm„isess„ ajurissa olla
+        ylim„„r„ist„ ohjelmakoodia joka tarkistaa seuraavan laitteen 
+        lis„muistia varten. Siksi et voi k„ytt„„ ensimm„isen„ ajurina 
+        pient„ versiota SRDXMSS.SYS tai SRDEMSS.SYS.
+
+
+                        5.3. SRDUMMY LAITEAJURI
+
+SRDUMMY.SYS:i„ voi k„ytt„„ asennettavan laiteajurin pakottamiseen 
+johonkin tiettyyn kirjaimeen.
+
+DOS varaa levyasemakirjaimet j„rjestyksess„ A:sta Z:taan. Ensimm„iset 
+asemat A ja B k„ytet„„n aina levyasemille. Jos sinulla on kovalevyj„, 
+kirjaimet C:sta eteenp„in varataan niille ennen kuin CONFIG.SYS:i„ 
+ladataan. Kun kaikille laitteille on varattu kirjaimet, luetaan 
+CONFIG.SYS ja siell„ asennettaville lohkolaitteille (block device, laite 
+joka tarjoaa taulukon sektoreita DOS:lle kuten SRDISK tekee) varataan 
+j„rjestyksess„ kirjaimet. Laitteet itse eiv„t saa p„„tt„„ mihin 
+kirjaimeen ne tulevat.
+
+SRDUMMY.SYS kertoo DOS:lle ett„ se tarjoaa yhden tai enemm„n 
+lohkolaitteita ja siten DOS k„ytt„„ sille kirjaimia. SRDUMMY.SYS ei 
+kuitenkaan tarjoa asemia, vaan kertoo DOS:lle ett„ asema ei ole valmis.
+
+SRDUMMY.SYS ottaa yhden parametrin: Aseman kirjaimen, johon seuraava 
+lohkolaite tulisi asentaa.
+
+DR-DOS 6 ei n„yt„ ymm„rt„v„n laitteita en„„n kirjaimen P j„lkeen vaikka 
+CONFIG.SYS:ssa olisi LASTDRIVE=Z lause. Joten DR-DOS:n kanssa tulee 
+v„ltt„„ kirjainten k„ytt”„ P:n j„lkeen.
+
+
+                          5.4. SRDISK OHJELMA
+
+Levyn saa k„ytt””n esim. k„ytt„m„ll„ k„sky„ "SRDISK 1024", joka tekee 
+ensimm„isest„ SRDISK asemasta 1024 kilotavun aseman. Sen saa pois 
+asettamalla sen kooksi nollan: "SRDISK 0".
+
+Sinun kannattaa laittaa komento "SRDISK 1024" AUTOEXEC.BAT tiedostoon.
+
+SRDISK.EXE antaa listan t„rkeimmist„ parametreista parametrilla "/?". 
+Kirjoita "SRDISK /?" ja paina enter.
+
+
+                   5.4.1. SRDISK OHJELMAN PARAMETRIT
+
+Jotta parametrit olisi helpompi muistaa, SRDISK:ll„ on joillekin 
+asetuksille useita eri parametreja. Monet parametreista ovat pitki„, 
+mutta niit„ voi lyhent„„ kunhan SRDISK viel„ kykenee tunnistamaan mit„ 
+parametria tarkoitat.
+
+Kaikki numeroparametrit tulkitaan "C" kielen s„„nt”jen mukaan: numerot 
+jotka alkavat nollalla tulkitaan kahdeksan kantaisikai (eli 
+oktaaliluvuiksi, esim. 10 kahdeksan kannassa on 8 kymmenkannassa) ja 
+"0x":lla alkavat tulkitaan 16 kantaisiksi (heksadesimaalisiksi), loput 
+tulkitaan tavalliseen kymmenkantaan.
+
+Parametrit aakkosj„rjestyksess„ ovat:
+
+  /?               Listaa t„rkeimm„t parametrit
+  /A:n             FAT taulukkojen m„„r„ (1 tai 2)
+  /ASK             Kysy varmistus jos dataa h„vi„„ (oletus)
+  /AVAILABLE:n     Levylle n kilotavua vapaata
+  /BOOTSECTOR:tied Oma k„ynnistyssektori tiedostosta
+  /C:n             Klusterin koko
+  /CLUSTER:n       Sama kuin /C
+  /D:n             Juurihakemiston koko
+  /DEVICETYPE:n    Laitteen tyyppi DISKCOPY yhteensopivuutta varten
+  /DIRENTRIES:n    Sama kuin /D
+  /DOSFORMAT:n     DOS tai FDFORMAT n„k”isformaatti
+  /E               Aseta ymp„rist”muuttujat SRDISKn
+  /ENVIRONMENT     Sama kuin /E
+  /ERASE           Tyhjenn„ levy
+  /F:n             Sama kuin /DOSFORMAT, FORMAT yhteensopiva
+  /FATS:n          Sama kuin /A
+  /FILESPACE:n     Levylle tiedostotilaa n kilotavua
+  /FORCE           Tuhoa tieto jos se on tarpeellista koon muuttamiseksi
+  /FREEMEM:n       J„t„ ainakin n kilotavua vapaata muistia
+  /H               Sama kuin /?
+  /HEADS:n         Lukup„iden m„„r„ (DISKCOPY)
+  /HELP            Sama kuin /?
+  /M:n[:n...]      Maksimikoot linkitetyille laiteajureille
+  /MAXSIZE         Tee levyst„ niin suuri kuin mahdollista
+  /MEDIA:n         Media ID tavu (DISKCOPY)
+  /MINSIZE         Sama kuin /AVAILABLE:0, minimoi levyn
+  /NO              NO eli EI, ei tuhoa tietoja koon muuttamiseksi
+  /O               K„yt„ vanhaa levyn formaattia oletusarvoina
+  /OLD             Sama kuin /O
+  /REMOVABLE:x     Levy "vaihdettava". x arvo OFF, tekee levyst„ kiinte„n.
+  /S:n             Seektorin koko (128, 256 tai 512 tavua)
+  /SECTORS:n       Sektoreiden m„„r„ uralla (DISKCOPY)
+  /SECTORSIZE:n    Sama kuin /S
+  /SIDES:n         Sama kuin /HEADS
+  /SPT:n           Sama kuin /SECTORS
+  /U               Sama kuin /ERASE, FORMAT yhteensopiva
+  /UNCONDITIONAL   Sama kuin /ERASE
+  /V:n             Tulostuksen m„„r„ (1-5)
+  /VERBOSE:n       Sama kuin /V
+  /W:x             Kirjoitus suojaus. x on ON/+ tai OFF/-
+  /WRITEPROTECT:x  Sama kuin /W
+  /Y               Sama kuin /FORCE
+  /YES             Sama kuin /FORCE
+
+Oudoimpien optioiden tarkemmat selostukset alla. Kaikkiin optioihin 
+l”ytyy englannin kielisest„ ohjeesta tarkempaa opastusta.
+
+  /F:n /DOSFORMAT:n
+
+        DOS ja FDFORMAT n„k”isformaatteja. Numero n m„„rittelee levyn 
+        koon kilotavuissa. T„m„ optio asettaa my”s kaikki muut 
+        parametrit kuten ne ovat DOS:n FORMAT ja FDFORMAT komennoilla 
+        formatoiduilla levyill„.
+
+        Levyn kokoa muutettaessa klusterin koko ei v„ltt„m„tt„ muutu 
+        oikein jos levyll„ on tietoa jo valmiiksi.
+
+        T„m„ versio tukee seuraavia formaatteja:
+
+          Koko Media Laite  SPT Head Root
+
+           160  FE    360    8   1    64    DOS
+           180  FC    360    9   1    64    DOS
+           200  FD    360   10   1   112    FDFORMAT
+           205  FD    360   10   1   112    FDFORMAT
+           320  FF    360    8   2   112    DOS
+           360  FD    360    9   2   112    DOS
+           400  FD    360   10   2   112    FDFORMAT
+           410  FD    360   10   2   112    FDFORMAT
+           640  FB    720    8   2   112    DOS
+           720  F9    720    9   2   112    DOS
+           800  F9    720   10   2   112    FDFORMAT
+           820  F9    720   10   2   112    FDFORMAT
+          1200  F9    1.2   15   2   224    DOS
+          1440  F0   1.44   18   2   224    DOS
+          1476  F0   1.44   18   2   224    FDFORMAT
+          1600  F0   1.44   20   2   224    FDFORMAT
+          1640  F0   1.44   20   2   224    FDFORMAT
+          1680  F0   1.44   21   2   224    FDFORMAT
+          1722  F0   1.44   21   2   224    FDFORMAT
+          2880  F0   2.88   24   2   240    DOS
+
+        N„iden lis„ksi on erikoisformaatti 1, joka tekee mahdollisimman 
+        pienen levyn. T„st„ on apua, jos RAM levysi on polussa (PATH) ja 
+        haluat vapauttaa mahdollisimman paljon muistia ilman "Drive Not 
+        Ready" virheit„. Tarkista kuitenkin muistinhallinta ohjelmasi, 
+        sill„ jotkin XMS ajurit ja kaikki EMS ajurit varaavat muistia 16 
+        kilotavun lohkoissa.
+
+  /M:n[:n...]
+
+        Suurimmat koot ajureille jotka on linkitetty samaan asemaan.
+
+        Yleens„ SRDISK k„ytt„„ mahdollisimman paljon muistia 
+        ensimm„isell„ ajurilla ennen kuin ryhtyy k„ytt„m„„n seuraavan 
+        ajurin muistia. T„ll„ optiolla voit rajoittaa kuinka paljon 
+        muistia eri ajurit saavat k„ytt„„.
+
+        Esimerkiksi, jos haluat ett„ ensimm„inen ajuri saa k„ytt„„ vain 
+        100 kilotavua muistia, anna komento
+
+                SRDISK /M:100
+
+        Jos sinulla on kolme tai useampia ajureita linkitettyn„ yhteen 
+        asemaan, voit esimerkiksi m„„ritell„ ensimm„isen ja kolmannen 
+        k„ytt„m„„n korkeintaan 100 kilotavua komennolla
+
+                SRDISK /M:100::100
+
+
+
+                          6. ONGELMANRATKONTAA
+
+Seuraavia ongelmia saattaa esiinty„:
+
+1. RAM levyt menett„v„t sis„lt”ns„ kun katkaiset tietokoneesta virran! 
+Žl„ talleta niille mit„„n arvokasta.
+
+2. XMS ja EMS muistit tarvitsevat laiteajurin. T„m„ laiteajuri tulee 
+ladata ennen SRDISK laiteajureita.
+
+3. Kaikki HIMEM.SYS ajurit eiv„t tue muistia 16 megatavun yl„puolella.
+
+4. DR-DOS 5 HIDOS.SYS ei toteuta varatun muistin m„„r„n muutosta, joten 
+levyn koon muuttaminen voi olla mahdotonta. Korvaa HIDOS.SYS 
+HIMEM.SYS:ll„.
+
+5. Jotkin ohjelmat siirt„v„t osan itsest„„n RAM levylle kun k„yt niist„ 
+DOS:ssa. T„ll”in voi olla vaarallista muuttaa RAM levyn formaattia.
+
+6. Joidenkin levyv„limuistien on kerrottu aiheuttavan ongelmia. Katso
+ettei v„limuistisi yrit„ tarjota v„limuistia SRDISK:lle my”s. Lataa 
+v„limuisti SRDISK:i„ ennen jos t„m„ ei muuten onnistu.
+
+7. SRDISK tarvitsee XMS muistinsa yhdess„ yhten„isess„ lohkossa. Siten 
+jos sinulla on muita ohjelmia jotka k„ytt„v„t XMS muistia, saattaa 
+toinen ohjelma k„ytt„„ palan muistia muistin keskelt„ ja siten 
+SRDISK:ll„ ei ole kaikkea vapaata muistia k„yt”ss„„n vaikka se niin 
+luulee ja levyn asennus voi ep„onnistua. EMS muistilla ei yleens„ ole 
+t„t„ ongelmaa.
+
+8. Jotkin moniajoymp„rist”t kuten MS-Windows voivat vapauttaa levylle 
+varatun muistin jos muisti on varattu levylle moniajoymp„rist”n sis„ll„. 
+T„m„ aiheuttaa tiedon menetyksen ja virheit„ ohjelmissa jotka yritt„v„t 
+k„ytt„„ levy„.
+
+9. Windows 95 hidastaa itsens„ jos SRD?MS.SYS ei ole nimelt„„n
+RAMDRIVE.SYS.
+
+
+
+
+
+                             7. TUOTEMERKIT
+
+Seuraavassa ovat dokumentissa mainitut tuotemerkit:
+
+QEMM - Quartedreck Office Systems Inc.
+Microsoft, MS-DOS, SmartDrive ja Windows - Microsoft Corporation.
+DR-DOS - Novell.
+Intel - Intel Corporation.
+Lotus - Lotus Development Corporation.
+
+FDFORMAT - Christoph H. Hockst„tter, Germany.
+
+SRDISK on minun.
+
+Jos joitain tuotemerkkej„ j„i mainitsematta, olen pahoillani. Tunnustan 
+ne kaikki.
+
+
+
+                             8. LOPPUSANAT
+
+Minuun voi ottaa yhteytt„ s„hk”postilla osoitteessa
+kohtala@users.sourceforge.net. Projektin kotisivu on osoitteessa
+http://sourceforge.net/projects/srdisk.

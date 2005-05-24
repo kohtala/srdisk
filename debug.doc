@@ -1,0 +1,37 @@
+The following debug codes are used in the srdisk.sys
+
+a-b-c   32 bit first sector dx:ax and the number of sectors to xfer in
+        batch_xfer
+
+T       Number of sectors that can be transferred if the number of decreased
+        by batch_xfer
+
+N       Number of sectors xferred in one part of disk. batch_xfer
+
+E       Error in batch_xfer with count of sectors remaining
+
+F       Requested function.
+
+Q       Return status from DOS Request.
+
+/-/     Current stack pointer versus what it is supposed to be
+
+C       Media Change. Low byte is the conf.c_media_change.
+
+B       Build BPB. Low byte is the RW_access.
+
+OFFFF   Open file.
+
+R0000   Read request.
+
+W0000   Write request.
+
+30000   32-bit sector addressing used.
+
+S       Sector not found with number of sectors remaining to xfer.
+
+G       Generic IOCTL minor code in low byte.
+
+0-2-4-6-S-M     GIOCTL Set device parameters first bytes, sectors and media
+
+

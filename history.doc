@@ -1,0 +1,45 @@
+History of device drivers:
+1.00  Initial release
+1.10  Added into IOCTL_msg media_change byte, that must be changed to
+      -1 by srdisk if media changed. Changed header version to SRD 1.10.
+1.20  Fixed name of program by adding the missing 'Re' to 'Sizeable'.
+      Upgraded IOCTL_msg_s to version 1.20 by adding byte to tell usable
+      memory types.
+      Updated to work with DOS versions 2.x-5.x - not tested.
+1.30
+      Major redesign of the reformatting system. Ioctl is no longer used.
+      New data structures of version V_FORMAT 0 (beta format).
+      Support for multiplex interrupt.
+      Support for chaining of drivers for different memory to same disk.
+      Support for DOS 4+ 32-bit sector addresses.
+      [Allow forcing drive to some drive letter (even replace DOS drives).]
+      Int 19 hooking is optional by defining HOOKINT19 to 0.
+      Added if ... endif around all memory specific code to ease
+       later adding of other memory support code.
+      Fixed parameter reading to abort on every ctrl-character other
+       than tab. DOS 5 could end line with LF if no parameters and CR if
+       there were parameters. Now even NUL can end the line.
+1.40
+      Moved the allocation conditionally out from this device driver.
+       If C_NOALLOC in CAPABLE is set, the SRDISK.EXE is expected to do
+       the allocation by itself.
+      Changed multiplex interrupt interface to be more standardlike.
+      Changed XMS handle to default 0 as indication there is no handle
+       already allocated.
+      Made the default BPB to contain a valid disk layout. The zero sectors
+       in BPB made DR-DOS hang with divide error.
+      Added check for DR-DOS 6 since it tells the init request header is
+       not long enough to hold the drive letter, but the drive letter is
+       there anyway.
+1.42
+      Split into three files: xmsdisk.asm, define.inc and this srdisk.asm
+      Made it not to allocate a handle before one is needed.
+      Removed drive forcing code - it had a bug since 1.40 and in any
+       case made things only worse.
+1.50
+      Generic IOCTL support.
+      disk_IO interface changed.
+      Clarified code by writing dosstruc.inc and using the structures
+1.51
+      Made it read the BPB from the boot sector being written to the disk.
+

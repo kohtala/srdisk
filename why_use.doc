@@ -1,0 +1,15 @@
+
+                              SRDISK (TM)
+                 ReSizeable RAMDisk - Reasons to use it
+
+
+Here are some cases when you could use SRDISK
+
+- You have a bootable diskette that you should copy to a different sized 
+diskette. With SRDISK you can DISKCOPY it to the RAMdisk, resize the 
+RAMdisk and DISKCOPY it to the other diskette.
+
+- You have some programs that need free EMS or XMS memory and others 
+could use it better as a RAM disk.
+
+

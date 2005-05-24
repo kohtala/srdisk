@@ -1,0 +1,56 @@
+
+Device driver structure
+
+One:
+        Device header
+
+For each supported memory type:
+        Disk I/O
+        (Memory alloc)
+        (Query free)
+        Disk I/O memory class structure
+
+For each unit:
+        Unit structure and configuration
+        Used memory structures
+
+If not appended:
+        Device driver function pointers
+        Device driver functions
+
+
+
+
+Sample device source:
+
+                org     0
+; The following is to be considered as both a device driver header and
+; as a starting point for the configuration table. This driver will be
+; identified by its segment address and this structure must be at offset
+; 0.
+
+                ; Device driver header
+drhdr_next      dd      -1              ; Pointer to next device (now last)
+drhdr_attr      dw      DR_ATTRIBUTES
+drhdr_strategy  dw      offset strategy ; Offset to strategy function
+drhdr_commands  dw      offset commands ; Offset to commands function
+drhdr_units     db      1               ; Number of units
+
+; The rest has four functions to be considered
+;  1) usable as device driver name if this driver is changed
+;     into character device on init.
+;  2) usable as a label to be returned in media check call
+;  3) identifies this device driver as SRDISK driver by always having
+;     the letters SRD at offset dr_ID
+;  4) identifies the memory used by the 4 char string at offset dr_memory
+
+dr_volume       label byte
+dr_ID           db 'SRD'                ; SRDISK signature (3 char)
+dr_memory       db MEMSTR               ; Memory type identifier (4 char)
+dr_version      db SRD_VERSION          ; Device driver version (4 char)
+                db 0                    ; null to end volume label
+dr_v_format     db V_FORMAT             ; Configuration format version
+dr_conf         dw offset conf          ; Pointer to 1st unit configuration
+
+
+

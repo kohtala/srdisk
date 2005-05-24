@@ -1,0 +1,24 @@
+This RAM disk currently supports the following features:
+
+  * Compatible with MS-DOS versions from 3.00 to 5.x and DR-DOS 5 to 6.
+  * XMS - Extended memory on 286 and up with HIMEM or other XMS 2.0
+    driver.
+  * EMS - Expanded memory of LIM/EMS version 4.0.
+  * Device drivers may be chained to form larger disks using many
+    different kind memories.
+  * Resizeable - can preserve disk contents if new format has room
+    enough.
+  * Removable. Can be disabled without reboot.
+  * Supports 32-bit sector addressing introduced in DOS 4. Thus over 32M
+    RAM disks are possible.
+  * Configurable
+      - sector size
+      - cluster size
+      - root directory entry count
+      - number of FATs
+  * Predefined DOS and FDFORMAT floppy disk look-alike formats.
+  * DISKCOPY compatible with DOS versions from 3.20 up. You can copy
+    to/from SRDISK drive using DOS DISKCOPY.
+  * Write protection.
+  * Can optionally set environment variables SRDISKn (n=1,2,...) to
+    the installed SRDISK drive letters.

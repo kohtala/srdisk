@@ -1,0 +1,99 @@
+DO:
+
+- /C:32k possible
+- different label, some programs have problems with the space and dot
+- option to select the label to use
+- MS-DOS 7.0 long file names support
+
+TEST FOR RELEASE:
+
+- SRDUMMY.SYS (DOS 3.30 and DOS 6.0)
+- NU 7.0 with SRDUMMY.SYS
+- Find device driver loader
+
+DOCUMENT!!
+
+- Windows 3.1 Enhanced mode messes up with SRDISK. Only small versions 
+without DISKCOPY compatibility work if you do not touch the disk with 
+SRDISK.EXE.
+
+
+TEST!!
+
+- Disk allocating under DV. Does DV free the memory allocated to disk?
+
+- Make DOS 3.3 boot floppy that uses TLB to load rdisk.sys high.
+
+- /SECTORSIZE ja /SECTORS
+
+- /O and directory entries
+
+- Stacker with high compression
+
+FIX!!
+
+- Check parameters /S:128 /D:1024 which gives 256 sector root directory!
+
+- /MAXSIZE determines root directory size by the old size...
+
+- SRDISK.EXE should have some code to check if the drive letter is 
+correct. Perhaps IOCTL would be good for that. At least make it walk the 
+drive chain up to see how many block devices are there.
+
+- Warn if the drive to be resized is a substed one and do not save the 
+directory or otherwise access it through DOS if it is.
+
+- Updates boot sector although it is going to be complitely rewritten.
+
+
+DO!!
+
+- COMPRESSION
+
+- Make a chart of what SRDISK does in different situations.
+
+- Think about adding a variable into srdisk.exe to tell what we are 
+doing. Values like: nothing, resize, clear, disable, done?
+
+- Make a version of device driver into which can be copied an image of 
+the disk to be created when the driver is loaded into memory. This is 
+needed on diskless workstations to get files to RAMDisk in CONFIG.SYS.
+
+- Make one device driver support optionally many disks.
+
+- Make real help system to list the options with descriptions.
+
+- If diskcopied disk has sectors marked as bad, resizing could free
+them so that the disk can be resized for dumping onto different size 
+disk.
+
+- Examine COMBI to see if it could be later used as SRDISK device 
+driver. Let the author of COMBI do the exporting...
+
+- Memory alloc must find the largest possible amount of memory to
+allocate if the first attempt fails.
+
+- Make a real boot sector that will for example dispatch to boot from 
+HD. Else INT 19h is the right procedure to restart boot.
+
+- Catch the Break! See first if there is any point the break can 
+interrupt process.
+
+- Check if there is any possibility for errors when /M has been used and
+crash() tries to recreate the old format.
+
+- Check that file size and cluster chain lenght match.
+
+- Should test if lost clusters past end of disk after resize?
+
+else:
+
+- Change to AMIS system. I.e. multiplex interrupt 2Dh.
+
+- Add a flag C_PRESERVE to tell if the memory preserved it's contents
+when the size is changed (i.e. malloc is called). The flags of appended
+drivers should be possible to just or to the main driver.
+
+- Think about these:
+  2) add flag to tell if writing is in general possible to the memory
+
