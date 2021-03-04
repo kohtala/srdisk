@@ -1,4 +1,6 @@
-2.09 199?-??-??
+2.09 2005-06-05
+
+- Release under GNU GPL license. Source code at http://sf.net/projects/srdisk
 
 - Fix EMS error handling to show the EMS error code.
 
